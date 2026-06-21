@@ -99,7 +99,7 @@ class ChatService:
 
             # "[pokemon] é forte/superefetivo contra" → o que ele ataca bem
             if any(f"{pokemon_name} é {w}" in message_lower or f"{pokemon_name} e {w}" in message_lower
-                   for w in ["forte", "superefetivo", "super efetivo"]):
+                   for w in ["forte", "superefetivo", "super efetivo", "vence", "vantagem"]):
                 return self.get_pokemon_strong_against(pokemon_name)
 
             # "fraco/fraqueza/forte contra [pokemon]" → o que é forte contra ele
