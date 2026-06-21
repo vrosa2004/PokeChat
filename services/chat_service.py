@@ -82,7 +82,7 @@ class ChatService:
         message_lower = message.lower()
 
         if any(w in message_lower for w in
-               ["forte", "fraqueza", "fraco", "superefetivo", "super efetivo", "vence", "bate"]):
+               ["forte", "fraqueza", "fraco", "superefetivo", "super efetivo", "vence", "bate", "vantagem", "desvantagem"]):
 
             # "forte contra tipo terra" → fraquezas do tipo
             if "tipo" in message_lower:
