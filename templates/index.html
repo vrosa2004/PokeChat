@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PokeChat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <header>
+    <div class="pokeball-icon"></div>
+    <h1>PokeChat</h1>
+    <span class="status-dot">online</span>
+  </header>
+
+  <div id="chat-window"></div>
+
+  <div id="suggestions">
+    <button class="suggestion" onclick="sendSuggestion(this)">Qual a fraqueza do Pikachu?</button>
+    <button class="suggestion" onclick="sendSuggestion(this)">Qual o tipo do Charizard?</button>
+    <button class="suggestion" onclick="sendSuggestion(this)">O que é superefetivo contra Blastoise?</button>
+  </div>
+
+  <div id="input-bar">
+    <input id="user-input" type="text" placeholder="Pergunte sobre um Pokémon..." autocomplete="off" />
+    <button id="send-btn" onclick="sendMessage()">
+      <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+    </button>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
