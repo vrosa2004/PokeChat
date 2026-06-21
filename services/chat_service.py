@@ -120,7 +120,7 @@ class ChatService:
     def _extract_pokemon_name(self, message: str) -> str | None:
         stop_words = {"qual", "quais", "é", "são", "superefetivo", "super", "efetivo",
                       "contra", "o", "a", "fraqueza", "fraco", "forte", "vence", "bate",
-                      "de", "do", "da", "pokemon", "pokémon", "tipo", "?", "que", "sobre", "tem"}
+                      "de", "do", "da", "pokemon", "pokémon", "tipo", "?", "que", "sobre"}
         words = message.replace("?", "").split()
         candidates = [w for w in words if w not in stop_words and len(w) > 2]
         return candidates[-1] if candidates else None
