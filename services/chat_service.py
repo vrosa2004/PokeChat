@@ -1,9 +1,7 @@
 import os
 import json
-import google.generativeai as genai
+from groq import Groq
 from services.pokemon_service import PokemonService
-
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 class ChatService:
     TYPE_TRANSLATIONS = {
@@ -27,7 +25,7 @@ class ChatService:
     def __init__(self):
         self.pokemon_service = PokemonService()
         self.client = self.pokemon_service.client
-        self.model = genai.GenerativeModel("gemini-1.5-flash")
+        self.client_ai = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
     def _extract_intent(self, message: str) -> dict:
         prompt = f"""
@@ -46,15 +44,20 @@ Exemplos:
 "pikachu é forte contra que tipo?" -> {{"intent": "ataque", "pokemon": "pikachu", "type": null}}
 "qual o tipo do charizard?" -> {{"intent": "tipo_pokemon", "pokemon": "charizard", "type": null}}
 "que tipo vence pokémons de água?" -> {{"intent": "fraqueza_tipo", "pokemon": null, "type": "water"}}
-"qual o tipo do tipo fogo?" -> {{"intent": "fraqueza_tipo", "pokemon": null, "type": "fire"}}
 
 Mensagem: "{message}"
 """
         try:
-            response = self.model.generate_content(prompt)
-            text = response.text.strip().replace("```json", "").replace("```", "")
+            response = self.client_ai.chat.completions.create(
+                model="llama-3.1-8b-instant",
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0
+            )
+            text = response.choices[0].message.content.strip().replace("```json", "").replace("```", "")
+            print("GROQ RETORNOU:", text)
             return json.loads(text)
-        except Exception:
+        except Exception as e:
+            print("ERRO AO PARSEAR:", e)
             return {"intent": "desconhecido", "pokemon": None, "type": None}
 
     def get_pokemon_types(self, name: str):
@@ -99,7 +102,7 @@ Mensagem: "{message}"
     def get_super_effective_against_type(self, type_en: str) -> str:
         res = self.client.get_type(type_en)
         if not res:
-            return f"Não consegui buscar informações sobre esse tipo."
+            return "Não consegui buscar informações sobre esse tipo."
 
         counters = [t["name"] for t in res["damage_relations"]["double_damage_from"]]
         type_pt = next((k for k, v in self.TYPE_NAMES_PT.items() if v == type_en), type_en)
